@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0052ff" />
+    <title>Base Allocation Estimator | Unofficial</title>
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = savedTheme || (prefersDark ? "dark" : "light");
+      } catch (error) {
+        document.documentElement.dataset.theme = "light";
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="particle-layer" class="particle-layer" aria-hidden="true"></div>
+    <div class="page">
+      <aside class="sidebar">
+        <div class="sidebar-head">
+          <a class="brand" href="https://x.com/hi_vecna" target="_blank" rel="noopener noreferrer" aria-label="Created by hi_vecna on X">
+            <span class="base-dot"><span></span></span>
+            <span>BASE</span>
+          </a>
+          <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" type="button" aria-label="Switch to dark mode">
+            <span class="theme-icon">☾</span>
+          </button>
+        </div>
+
+        <nav class="nav" aria-label="Navigation">
+          <a class="nav-item active" href="#checker">
+            <span class="icon">◇</span>Airdrop Estimate
+          </a>
+          <a class="nav-item" href="https://basescan.org/" target="_blank" rel="noopener noreferrer">
+            <span class="icon">⇅</span>BaseScan
+          </a>
+          <a class="nav-item" href="https://layerhub.xyz/search?p=basetransation" target="_blank" rel="noopener noreferrer">
+            <span class="icon">&lt;/&gt;</span>LayerHub
+          </a>
+          <a class="nav-item" href="https://docs.base.org/" target="_blank" rel="noopener noreferrer">
+            <span class="icon">◎</span>Base Docs
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="notice">
+            <strong>Unofficial tool</strong>
+            <p>No official BASE token or airdrop allocation has been announced.</p>
+          </div>
+          <a class="created" href="https://x.com/hi_vecna" target="_blank" rel="noopener noreferrer">
+            Created by <strong>@hi_vecna</strong> ↗
+          </a>
+        </div>
+      </aside>
+
+      <main class="main" id="checker">
+        <header class="topbar">
+          <div>
+            <span class="badge">UNOFFICIAL · ESTIMATE ONLY</span>
+            <h1>Base Airdrop Estimator</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="theme-toggle desktop-theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+              <span class="theme-icon">☾</span>
+              <span class="theme-label">Dark</span>
+            </button>
+            <a class="profile-pill" href="https://x.com/hi_vecna" target="_blank" rel="noopener noreferrer">
+              <span class="base-dot small"><span></span></span>
+              <span>
+                <strong>Vecna</strong>
+                <small>@hi_vecna</small>
+              </span>
+              <span class="arrow">↗</span>
+            </a>
+          </div>
+        </header>
+
+        <section class="hero">
+          <div class="wallet-card">
+            <p class="eyebrow">Public Base address</p>
+            <form id="wallet-form" class="wallet-form">
+              <label class="sr-only" for="wallet-address">Wallet address</label>
+              <input
+                id="wallet-address"
+                name="wallet"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="Paste 0x wallet address"
+                required
+              />
+              <button id="check-button" type="submit">Check estimate</button>
+            </form>
+            <p class="helper">Reads public Base activity only. Never connect a wallet or sign a transaction here.</p>
+          </div>
+
+          <div class="status-card" id="status-card">
+            <span class="info-icon">i</span>
+            <p id="status-text">Enter an address to generate an estimated allocation.</p>
+          </div>
+        </section>
+
+        <div class="content-grid">
+          <section class="settings card">
+            <div class="section-heading">
+              <h2>Model Settings</h2>
+              <span class="muted">Hypothetical</span>
+            </div>
+            <button class="settings-toggle" id="settings-toggle" type="button" aria-expanded="false" aria-controls="settings-fields">
+              <span>Customize assumptions</span>
+              <span class="settings-chevron">⌄</span>
+            </button>
+            <div class="settings-fields" id="settings-fields">
+              <label>
+                FDV scenario
+                <select id="fdv">
+                  <option value="2000000000">$2B</option>
+                  <option value="4000000000" selected>$4B</option>
+                  <option value="6000000000">$6B</option>
+                  <option value="8000000000">$8B</option>
+                  <option value="10000000000">$10B</option>
+                  <option value="12000000000">$12B</option>
+                </select>
+              </label>
+              <label>
+                Total token supply assumption
+                <select id="supply">
+                  <option value="1000000000">1B tokens</option>
+                  <option value="5000000000">5B tokens</option>
+                  <option value="10000000000" selected>10B tokens</option>
+                </select>
+              </label>
+              <label>
+                Airdrop pool assumption
+                <select id="pool">
+                  <option value="0.025">2.5% of supply</option>
+                  <option value="0.05" selected>5% of supply</option>
+                  <option value="0.1">10% of supply</option>
+                  <option value="0.15">15% of supply</option>
+                  <option value="0.2">20% of supply</option>
+                </select>
+              </label>
+              <label>
+                Estimated recipients
+                <select id="recipients">
+                  <option value="50000">50K users</option>
+                  <option value="100000">100K users</option>
+                  <option value="200000">200K users</option>
+                  <option value="500000" selected>500K users</option>
+                  <option value="1000000">1M users</option>
+                </select>
+              </label>
+              <p class="model-note">
+                Recommended baseline: 10B supply, 5% user pool and 500K recipients. Comparable L2 drops are used only
+                to keep this simulation conservative.
+              </p>
+            </div>
+          </section>
+
+          <section class="results card" aria-live="polite">
+            <div class="section-heading">
+              <h2>Your Estimate</h2>
+              <span id="tier-badge" class="tier neutral">Waiting</span>
+            </div>
+            <div class="allocation">
+              <p>You could receive</p>
+              <strong id="token-output">-- BASE</strong>
+              <span id="usd-output">Estimated value: -- USDT</span>
+            </div>
+            <div class="metrics">
+              <article>
+                <span>Modeled token price</span>
+                <strong id="price-output">--</strong>
+              </article>
+              <article>
+                <span>Average share</span>
+                <strong id="average-output">--</strong>
+              </article>
+              <article>
+                <span>Activity score</span>
+                <strong id="score-output">--</strong>
+              </article>
+              <article>
+                <span>Model weight</span>
+                <strong id="multiplier-output">--</strong>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <section class="activity card">
+          <div class="section-heading">
+            <h2>Observed Activity</h2>
+            <div class="outbound" id="outbound-links"></div>
+          </div>
+          <div class="activity-grid">
+            <article><span>Transactions</span><strong id="tx-count">--</strong></article>
+            <article><span>Active days sampled</span><strong id="active-days">--</strong></article>
+            <article><span>Contracts sampled</span><strong id="contracts-count">--</strong></article>
+            <article><span>ETH balance</span><strong id="balance">--</strong></article>
+          </div>
+          <p class="footnote">
+            Activity is read from the Base public explorer API. Token supply, airdrop pool, recipients and distribution
+            weighting are user-selected assumptions, not official Base information or financial advice.
+          </p>
+        </section>
+        <a class="mobile-created" href="https://x.com/hi_vecna" target="_blank" rel="noopener noreferrer">
+          Created by <strong>@hi_vecna</strong> ↗
+        </a>
+      </main>
+    </div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
